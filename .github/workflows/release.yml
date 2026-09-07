@@ -26,8 +26,8 @@ jobs:
         run: npm ci --ignore-scripts --legacy-peer-deps
       - name: Verify source and committed distribution files
         run: npm run ci:check
-      - name: Build release tarball
-        run: npm run pack:release
+      - name: Pack verified build
+        run: npm pack --ignore-scripts
       - name: Create GitHub Release
         env:
           GH_TOKEN: ${{ github.token }}

@@ -80,7 +80,7 @@
     "test:artifact": "node scripts/verify-build.mjs",
     "verify:committed-build": "node scripts/verify-committed-build.mjs",
     "pack:check": "node scripts/verify-package.mjs",
-    "pack:release": "node scripts/pack-release.mjs",
+    "pack:release": "npm run build && npm pack --ignore-scripts",
     "smoke:dsh": "node scripts/smoke-dsh-install.mjs",
     "release:check": "npm run typecheck && npm run test && npm run build && npm run test:artifact && npm run pack:check",
     "ci:check": "npm run release:check && npm run verify:committed-build"

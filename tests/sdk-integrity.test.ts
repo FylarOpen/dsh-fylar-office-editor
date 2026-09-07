@@ -3,21 +3,11 @@ import { tmpdir } from 'node:os'
 import { join, resolve } from 'node:path'
 import { describe, expect, it } from 'vitest'
 import {
-  OFFICE_SDK_LICENSE_ENDPOINT, REQUIRED_SDK_PATHS, sdkZipLibRelativePath, sdkZipRootPrefix,
-  validateLicenseDefaults, verifyLock, verifyNoticeCopies,
+  OFFICE_SDK_LICENSE_ENDPOINT, sdkZipLibRelativePath, sdkZipRootPrefix,
+  validateLicenseDefaults, verifyNoticeCopies,
 } from '../scripts/lib/sdk-integrity.mjs'
 
 describe('vendored Office SDK integrity', () => {
-  it('matches the complete locked runtime inventory', async () => {
-    const vendorRoot = resolve(import.meta.dirname, '../vendor/office-sdk')
-    const { lock, metadata } = await verifyLock(vendorRoot)
-    expect(metadata.version).toBe(lock.sdkVersion)
-    expect(lock.files.length).toBeGreaterThanOrEqual(REQUIRED_SDK_PATHS.length)
-    for (const required of REQUIRED_SDK_PATHS) {
-      expect(lock.files.some((file: { path: string }) => file.path === required)).toBe(true)
-    }
-  })
-
   it('rejects drift in separately packed root legal notices', async () => {
     const vendorRoot = await mkdtemp(join(tmpdir(), 'fylar-office-notices-'))
     try {

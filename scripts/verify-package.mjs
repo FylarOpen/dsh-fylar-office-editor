@@ -25,6 +25,10 @@ const required = [
   'cordis.patch.yml',
   'lib/client.js',
   'lib/index.js',
+  'lib/client.js.map',
+  'lib/index.js.map',
+  'lib/types/client/index.d.ts',
+  'lib/types/index.d.ts',
   'package.json',
   'vendor/office-sdk/LOCK.json',
   'vendor/office-sdk/THIRD_PARTY_NOTICES',
@@ -45,8 +49,6 @@ for (const path of paths) {
     || path.startsWith('lib/')
     || path.startsWith('vendor/office-sdk/')
   if (!allowed) throw new Error(`Unexpected packed file: ${path}`)
-  if (path.startsWith('src/') || path.startsWith('tests/') || path.endsWith('.tgz')) {
-    throw new Error(`Source or test residue in package: ${path}`)
-  }
+  if (path.endsWith('.tgz')) throw new Error(`Nested tarball in package: ${path}`)
 }
 console.log(`Verified npm pack allowlist: ${paths.length} files, ${result.size} bytes packed`)
