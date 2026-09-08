@@ -23,13 +23,15 @@
 本插件由 [Fylar Office SDK](https://fylar.ai/) 驱动。它是一个完全运行在浏览器端、无服务器（serverless）的 Office 运行时，为任意 Web 应用带来原生 Office 能力。
 
 - **Web 原生、无服务器**：无需部署服务器、第三方转换工具或桌面 Office 套件；文件直接在浏览器内完成解析、渲染、编辑与导出。
-- **文件始终留在本地**：默认隐私友好——文档在客户端本地处理，无需上传到云端，因此零基础设施、成本更低，并且支持离线使用。
+- **文档内容留在本地处理**：Office 文件在客户端完成处理，不会上传到云端进行文档处理。SDK 仍可能按照商业许可证的说明连接 Fylar 授权服务，以校验凭据和统计用量。
 - **无需 iframe，只是一个 DOM 节点**：以可编程的 DOM 节点方式集成，而不是内嵌外部查看器。
 - **高保真兼容**：围绕 Office（OOXML）规范构建，尽可能保留版式、格式与文档行为，做到像素级渲染。
 - **高性能渲染**：文档秒级打开——首屏渲染低于 500ms，常规打开约 1~2 秒，全部在本地处理。
 - **一切皆可编程**：以 API-first 的方式暴露全部 Office 能力，根据需要使用 API 来操作编辑器。
 
 在本插件中，SDK 完全运行于 DSH 浏览器会话内：浏览器拿到文件 Blob 后，文档的渲染与编辑均由 SDK 管理（见下文“编辑与保存”一节）。
+
+随插件提供的 SDK 是专有商用软件。每个 License Credential 或关联客户账户享有合计最多 3,000 次 Metered Uses 的免费额度；额度用尽后，继续使用需要有效的付费权益或其他书面商业许可。具体定义和条款以 [Fylar Office SDK 商业许可证](./vendor/office-sdk/legal.txt)为准。
 
 ## 快速开始
 
@@ -39,25 +41,25 @@
 - Node.js `^22.19.0 || >=24.0.0`。
 - DSH Web profile。
 - 浏览器支持 Worker、SharedWorker、WebAssembly、IndexedDB、Blob 和 ArrayBuffer。
-- 根据所使用的 SDK 版本，具备有效的 Fylar Office SDK 试用许可或其他授权。
+- 具备有效的 Fylar Office SDK License Credential 或其他授权；随附商业许可证包含上述免费额度。
 
-### 1. 从 GitHub 安装
+### 1. 从 npm 安装
 
-先停止正在运行的 DSH，再安装插件仓库：
+先停止正在运行的 DSH，再安装插件包：
 
 ```bash
 npx @deepseek-ai/dsh plugin --profile web add \
-  github:FylarOpen/dsh-fylar-office-editor
+  dsh-fylar-office-editor
 ```
 
 如果从 DSH 源码仓库运行，则在 DSH 源码根目录执行：
 
 ```bash
 pnpm dsh plugin --profile web add \
-  github:FylarOpen/dsh-fylar-office-editor
+  dsh-fylar-office-editor
 ```
 
-仓库已经包含验证过的 `lib/` 构建产物和 SDK runtime，普通用户不需要克隆或构建插件。
+npm 包已经包含验证过的 `lib/` 构建产物和 SDK runtime，普通用户不需要克隆或构建插件。
 
 ### 2. 重启 DSH
 
@@ -132,12 +134,12 @@ Word 和 Excel 格式在以下条件全部满足时可以导出 PDF：
 
 ## 升级与卸载
 
-替换已安装版本时，先停止 DSH，移除当前插件，再安装仓库当前版本并重启：
+替换已安装版本时，先停止 DSH，移除当前插件，再安装当前 npm 包版本并重启：
 
 ```bash
 npx @deepseek-ai/dsh plugin --profile web remove dsh-fylar-office-editor
 npx @deepseek-ai/dsh plugin --profile web add \
-  github:FylarOpen/dsh-fylar-office-editor
+  dsh-fylar-office-editor
 npx @deepseek-ai/dsh web
 ```
 
@@ -151,6 +153,6 @@ npx @deepseek-ai/dsh web
 
 ## 分发与声明
 
-本仓库不是 npm registry 发布。本项目包含的 Fylar Office SDK 是专有软件，受[其许可声明](./vendor/office-sdk/legal.txt)、适用的试用条款以及与版权方签订的其他协议约束。能够访问 GitHub 仓库本身并不代表 SDK 被重新授权。
+本插件通过 npm registry 分发，并包含专有的 Fylar Office SDK runtime。SDK 受 [Fylar Office SDK 商业许可证](./vendor/office-sdk/legal.txt)、适用的订单以及其他书面商业协议约束，不属于开源软件。随附许可证为每个 License Credential 或关联客户账户提供合计最多 3,000 次 Metered Uses 的免费额度；额度用尽后，继续使用需要付费权益或其他书面商业许可。
 
 第三方声明保留在 [THIRD_PARTY_NOTICES](./vendor/office-sdk/THIRD_PARTY_NOTICES)。使用或分发构建包前请阅读 [NOTICE.md](./NOTICE.md)。

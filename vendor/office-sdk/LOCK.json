@@ -17,8 +17,8 @@
     },
     {
       "path": "THIRD_PARTY_NOTICES",
-      "size": 2194,
-      "sha256": "bf01866b6aba3dad6f69e5973202fd7d3c6d6e253c8af7f0830dee04640f4ba8"
+      "size": 12233,
+      "sha256": "97b78bfafe67f2cc6caa25f8c4faf541b668ca8ac821c71b9e0b1ebe094a1b0f"
     },
     {
       "path": "UI.d.ts",
@@ -67,8 +67,8 @@
     },
     {
       "path": "legal.txt",
-      "size": 518,
-      "sha256": "c23578853ea5bae783cd79b35ee212e50624145552cf3078debb5ca2694fc677"
+      "size": 7716,
+      "sha256": "0574d469be2a9f1ad83323c5d66379caaea94bf6398c190ff6b534ed837cfb73"
     },
     {
       "path": "licenseDefault.js",

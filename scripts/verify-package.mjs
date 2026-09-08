@@ -1,5 +1,5 @@
 import { execFileSync } from 'node:child_process'
-import { mkdtempSync, rmSync } from 'node:fs'
+import { mkdtempSync, readFileSync, rmSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 
@@ -16,6 +16,16 @@ try {
 }
 const [result] = JSON.parse(output)
 if (result === undefined || !Array.isArray(result.files)) throw new Error('npm pack did not return a file inventory')
+
+const manifest = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8'))
+if (manifest.private !== false) throw new Error('Package must explicitly set private=false before publication')
+if (manifest.license !== 'SEE LICENSE IN vendor/office-sdk/legal.txt') {
+  throw new Error('Package license metadata must point to the bundled commercial license')
+}
+if (manifest.publishConfig?.access !== 'public') throw new Error('Package publish access must be public')
+if (manifest.publishConfig?.registry !== 'https://registry.npmjs.org/') {
+  throw new Error('Package publish registry must be the public npm registry')
+}
 
 const paths = result.files.map(file => file.path).sort()
 const required = [

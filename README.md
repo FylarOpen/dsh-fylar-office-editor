@@ -23,13 +23,15 @@ The plugin can create a real DOCX file from the agent's Markdown response. It ca
 This plugin is powered by the [Fylar Office SDK](https://fylar.ai/) — a fully client-side, serverless Office runtime that brings native Office capabilities to any web application.
 
 - **Web-native and serverless** — no server deployment, third-party conversion tools, or desktop Office suites; files are parsed, rendered, edited, and exported directly in the browser.
-- **Files stay local** — privacy by design: documents are processed on the client without uploading for cloud processing, which means zero infrastructure, lower cost, and offline-ready operation.
+- **Document content stays local** — Office files are processed on the client instead of being uploaded for cloud document processing. The SDK may still contact the Fylar licensing service to validate credentials and meter usage as described in the commercial license.
 - **No iframe, just a DOM node** — integration is a programmable DOM node instead of an embedded external viewer.
 - **High-fidelity compatibility** — built around the Office (OOXML) specification to preserve layout, formatting, and document behavior, with pixel-perfect rendering wherever possible.
 - **High-performance rendering** — documents open in seconds: first paint in under 500 ms and typical opening in 1–2 s, all processed 100% locally.
 - **Everything is programmable** — all Office capabilities are exposed in an API-first way, and you can use the API to operate the editor as needed.
 
 In this plugin, the SDK runs entirely inside the DSH browser session: after the browser receives a file as a Blob, the SDK owns document rendering and editing (see [Editing and saving](#editing-and-saving)).
+
+The bundled SDK is proprietary commercial software. Each License Credential or associated customer account includes an aggregate Free Allowance of up to 3,000 Metered Uses. Continued use after that allowance requires an active paid entitlement or another written commercial license. See the [Fylar Office SDK Commercial License](./vendor/office-sdk/legal.txt) for the controlling definitions and terms.
 
 ## Get started
 
@@ -39,25 +41,25 @@ In this plugin, the SDK runs entirely inside the DSH browser session: after the 
 - Node.js `^22.19.0 || >=24.0.0`.
 - The DSH Web profile.
 - A modern browser with Worker, SharedWorker, WebAssembly, IndexedDB, Blob, and ArrayBuffer support.
-- A valid trial or other authorization for the bundled Fylar Office SDK, as applicable to your SDK build.
+- A valid Fylar Office SDK License Credential or other authorization. The bundled commercial license includes the Free Allowance described above.
 
-### 1. Install from GitHub
+### 1. Install from npm
 
-Stop the currently running DSH process, then install the plugin repository:
+Stop the currently running DSH process, then install the plugin package:
 
 ```bash
 npx @deepseek-ai/dsh plugin --profile web add \
-  github:FylarOpen/dsh-fylar-office-editor
+  dsh-fylar-office-editor
 ```
 
 If running DSH from its source repository, use the repository script instead:
 
 ```bash
 pnpm dsh plugin --profile web add \
-  github:FylarOpen/dsh-fylar-office-editor
+  dsh-fylar-office-editor
 ```
 
-The repository includes its verified `lib/` output and SDK runtime, so users do not need to clone or build the plugin.
+The npm package includes its verified `lib/` output and SDK runtime, so users do not need to clone or build the plugin.
 
 ### 2. Restart DSH
 
@@ -132,12 +134,12 @@ When the environment does not qualify, the PDF action is disabled and the plugin
 
 ## Upgrade and uninstall
 
-To replace an existing installation, stop DSH, remove the current plugin row, install the current repository version, and restart:
+To replace an existing installation, stop DSH, remove the current plugin row, install the current npm package version, and restart:
 
 ```bash
 npx @deepseek-ai/dsh plugin --profile web remove dsh-fylar-office-editor
 npx @deepseek-ai/dsh plugin --profile web add \
-  github:FylarOpen/dsh-fylar-office-editor
+  dsh-fylar-office-editor
 npx @deepseek-ai/dsh web
 ```
 
@@ -151,6 +153,6 @@ npx @deepseek-ai/dsh web
 
 ## Distribution and notices
 
-This repository is not published through the npm registry. The bundled Fylar Office SDK is proprietary and is governed by [its license notice](./vendor/office-sdk/legal.txt), any applicable trial terms, and any separate agreement with its copyright holder. GitHub access alone does not relicense the SDK.
+This plugin is distributed through the npm registry and includes the proprietary Fylar Office SDK runtime. The SDK is governed by the [Fylar Office SDK Commercial License](./vendor/office-sdk/legal.txt), any applicable order form, and any separate written commercial agreement. It is not open-source software. The bundled license provides an aggregate maximum of 3,000 Metered Uses per License Credential or associated customer account; continued use requires a paid entitlement or another written commercial license after that allowance is exhausted.
 
 Third-party notices are preserved in [THIRD_PARTY_NOTICES](./vendor/office-sdk/THIRD_PARTY_NOTICES). See [NOTICE.md](./NOTICE.md) before using or redistributing a packaged build.

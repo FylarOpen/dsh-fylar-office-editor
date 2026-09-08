@@ -1,6 +1,6 @@
 {
   "name": "dsh-fylar-office-editor",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Fylar Office Editor integration for the DeepSeek Harness Web profile, powered by Fylar Office SDK",
   "keywords": [
     "deepseek-harness",
@@ -18,8 +18,12 @@
   "bugs": {
     "url": "https://github.com/FylarOpen/dsh-fylar-office-editor/issues"
   },
-  "private": true,
-  "license": "UNLICENSED",
+  "private": false,
+  "license": "SEE LICENSE IN vendor/office-sdk/legal.txt",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
   "type": "module",
   "main": "./lib/index.js",
   "types": "./lib/types/index.d.ts",
@@ -82,6 +86,7 @@
     "pack:check": "node scripts/verify-package.mjs",
     "pack:release": "npm run build && npm pack --ignore-scripts",
     "smoke:dsh": "node scripts/smoke-dsh-install.mjs",
+    "prepublishOnly": "npm run release:check",
     "release:check": "npm run typecheck && npm run test && npm run build && npm run test:artifact && npm run pack:check",
     "ci:check": "npm run release:check && npm run verify:committed-build"
   },
