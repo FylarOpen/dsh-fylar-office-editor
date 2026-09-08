@@ -47,14 +47,14 @@
 
 ```bash
 npx @deepseek-ai/dsh plugin --profile web add \
-  github:FylarOpen/fylar-deepseek-harness-office-editor
+  github:FylarOpen/dsh-fylar-office-editor
 ```
 
 如果从 DSH 源码仓库运行，则在 DSH 源码根目录执行：
 
 ```bash
 pnpm dsh plugin --profile web add \
-  github:FylarOpen/fylar-deepseek-harness-office-editor
+  github:FylarOpen/dsh-fylar-office-editor
 ```
 
 仓库已经包含验证过的 `lib/` 构建产物和 SDK runtime，普通用户不需要克隆或构建插件。
@@ -137,7 +137,7 @@ Word 和 Excel 格式在以下条件全部满足时可以导出 PDF：
 ```bash
 npx @deepseek-ai/dsh plugin --profile web remove dsh-fylar-office-editor
 npx @deepseek-ai/dsh plugin --profile web add \
-  github:FylarOpen/fylar-deepseek-harness-office-editor
+  github:FylarOpen/dsh-fylar-office-editor
 npx @deepseek-ai/dsh web
 ```
 

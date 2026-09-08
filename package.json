@@ -12,11 +12,11 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/FylarOpen/fylar-deepseek-harness-office-editor.git"
+    "url": "git+https://github.com/FylarOpen/dsh-fylar-office-editor.git"
   },
-  "homepage": "https://github.com/FylarOpen/fylar-deepseek-harness-office-editor#readme",
+  "homepage": "https://github.com/FylarOpen/dsh-fylar-office-editor#readme",
   "bugs": {
-    "url": "https://github.com/FylarOpen/fylar-deepseek-harness-office-editor/issues"
+    "url": "https://github.com/FylarOpen/dsh-fylar-office-editor/issues"
   },
   "private": true,
   "license": "UNLICENSED",

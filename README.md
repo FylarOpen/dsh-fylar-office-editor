@@ -47,14 +47,14 @@ Stop the currently running DSH process, then install the plugin repository:
 
 ```bash
 npx @deepseek-ai/dsh plugin --profile web add \
-  github:FylarOpen/fylar-deepseek-harness-office-editor
+  github:FylarOpen/dsh-fylar-office-editor
 ```
 
 If running DSH from its source repository, use the repository script instead:
 
 ```bash
 pnpm dsh plugin --profile web add \
-  github:FylarOpen/fylar-deepseek-harness-office-editor
+  github:FylarOpen/dsh-fylar-office-editor
 ```
 
 The repository includes its verified `lib/` output and SDK runtime, so users do not need to clone or build the plugin.
@@ -137,7 +137,7 @@ To replace an existing installation, stop DSH, remove the current plugin row, in
 ```bash
 npx @deepseek-ai/dsh plugin --profile web remove dsh-fylar-office-editor
 npx @deepseek-ai/dsh plugin --profile web add \
-  github:FylarOpen/fylar-deepseek-harness-office-editor
+  github:FylarOpen/dsh-fylar-office-editor
 npx @deepseek-ai/dsh web
 ```
 
