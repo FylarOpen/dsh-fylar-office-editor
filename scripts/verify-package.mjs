@@ -18,6 +18,9 @@ const [result] = JSON.parse(output)
 if (result === undefined || !Array.isArray(result.files)) throw new Error('npm pack did not return a file inventory')
 
 const manifest = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8'))
+if (manifest.name !== '@fylar/dsh-fylar-office-editor') {
+  throw new Error('Package must be published from the @fylar organization scope')
+}
 if (manifest.private !== false) throw new Error('Package must explicitly set private=false before publication')
 if (manifest.license !== 'SEE LICENSE IN vendor/office-sdk/legal.txt') {
   throw new Error('Package license metadata must point to the bundled commercial license')

@@ -4,7 +4,7 @@
 
 [English](./README.md) · 简体中文
 
-`dsh-fylar-office-editor` 将 Office 文档接入 DeepSeek Harness（DSH）Web。插件提供对话交付卡片、Office 工作区页签、右侧栏编辑器和全屏编辑器，底层由 Fylar Office SDK 驱动。
+`@fylar/dsh-fylar-office-editor` 将 Office 文档接入 DeepSeek Harness（DSH）Web。插件提供对话交付卡片、Office 工作区页签、右侧栏编辑器和全屏编辑器，底层由 Fylar Office SDK 驱动。
 
 插件可以把 Agent 的 Markdown 回复转换为真实 DOCX，也可以展示由 Python、Shell 或其他工具在当前 DSH 工作区生成的 DOC、DOCX、XLS、XLSX 和 PPTX 文件。
 
@@ -49,14 +49,14 @@
 
 ```bash
 npx @deepseek-ai/dsh plugin --profile web add \
-  dsh-fylar-office-editor
+  @fylar/dsh-fylar-office-editor
 ```
 
 如果从 DSH 源码仓库运行，则在 DSH 源码根目录执行：
 
 ```bash
 pnpm dsh plugin --profile web add \
-  dsh-fylar-office-editor
+  @fylar/dsh-fylar-office-editor
 ```
 
 npm 包已经包含验证过的 `lib/` 构建产物和 SDK runtime，普通用户不需要克隆或构建插件。
@@ -139,7 +139,7 @@ Word 和 Excel 格式在以下条件全部满足时可以导出 PDF：
 ```bash
 npx @deepseek-ai/dsh plugin --profile web remove dsh-fylar-office-editor
 npx @deepseek-ai/dsh plugin --profile web add \
-  dsh-fylar-office-editor
+  @fylar/dsh-fylar-office-editor
 npx @deepseek-ai/dsh web
 ```
 

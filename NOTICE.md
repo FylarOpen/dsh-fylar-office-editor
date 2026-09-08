@@ -1,6 +1,6 @@
 # Distribution and SDK Notice
 
-`dsh-fylar-office-editor` is distributed through the npm registry and GitHub
+`@fylar/dsh-fylar-office-editor` is distributed through the npm registry and GitHub
 Releases as a DeepSeek Harness plugin that embeds the Fylar Office SDK runtime.
 This distribution and the bundled SDK are proprietary commercial software, not
 open-source software.

@@ -4,6 +4,8 @@ import { createRequire } from 'node:module'
 import { runInNewContext } from 'node:vm'
 import * as host from '../lib/index.js'
 
+const PACKAGE_NAME = '@fylar/dsh-fylar-office-editor'
+const PLUGIN_ID = 'dsh-fylar-office-editor'
 const client = await readFile(new URL('../lib/client.js', import.meta.url), 'utf8')
 const manifest = JSON.parse(await readFile(new URL('../package.json', import.meta.url), 'utf8'))
 const require = createRequire(import.meta.url)
@@ -24,14 +26,15 @@ runInNewContext(client, {
 }, { filename: 'lib/client.js' })
 assert.equal(registrations.length, 1, 'Client must register one DSH module')
 const [registration] = registrations
-assert.equal(registration.id, manifest.name)
+assert.equal(manifest.name, PACKAGE_NAME)
+assert.equal(registration.id, PLUGIN_ID)
 const plugin = registration.factory(request => {
   assert.ok(platformModules.has(request), `Client requests an undeclared DSH module: ${request}`)
   return require(request)
 })
 assert.equal(typeof plugin.apply, 'function', 'Client must export apply')
 assert.ok(Array.isArray(plugin.inject), 'Client must declare its injected services')
-assert.equal(host.name, manifest.name)
+assert.equal(host.name, PLUGIN_ID)
 assert.equal(typeof host.apply, 'function', 'Host must export apply')
 
 assert.equal(manifest.dsh?.bundle?.patch, './cordis.patch.yml')

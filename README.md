@@ -4,7 +4,7 @@
 
 English · [简体中文](./README.zh-CN.md)
 
-`dsh-fylar-office-editor` connects Office documents to the DeepSeek Harness (DSH) Web experience. It adds a single delivery card to the conversation, an Office workspace tab, a side-panel editor, and a fullscreen editor, all powered by the Fylar Office SDK.
+`@fylar/dsh-fylar-office-editor` connects Office documents to the DeepSeek Harness (DSH) Web experience. It adds a single delivery card to the conversation, an Office workspace tab, a side-panel editor, and a fullscreen editor, all powered by the Fylar Office SDK.
 
 The plugin can create a real DOCX file from the agent's Markdown response. It can also present existing DOC, DOCX, XLS, XLSX, and PPTX files created by Python, shell commands, or other tools in the current DSH workspace.
 
@@ -49,14 +49,14 @@ Stop the currently running DSH process, then install the plugin package:
 
 ```bash
 npx @deepseek-ai/dsh plugin --profile web add \
-  dsh-fylar-office-editor
+  @fylar/dsh-fylar-office-editor
 ```
 
 If running DSH from its source repository, use the repository script instead:
 
 ```bash
 pnpm dsh plugin --profile web add \
-  dsh-fylar-office-editor
+  @fylar/dsh-fylar-office-editor
 ```
 
 The npm package includes its verified `lib/` output and SDK runtime, so users do not need to clone or build the plugin.
@@ -139,7 +139,7 @@ To replace an existing installation, stop DSH, remove the current plugin row, in
 ```bash
 npx @deepseek-ai/dsh plugin --profile web remove dsh-fylar-office-editor
 npx @deepseek-ai/dsh plugin --profile web add \
-  dsh-fylar-office-editor
+  @fylar/dsh-fylar-office-editor
 npx @deepseek-ai/dsh web
 ```
 

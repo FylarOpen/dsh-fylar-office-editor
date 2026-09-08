@@ -5,7 +5,8 @@ import { join, resolve } from 'node:path'
 
 const projectRoot = resolve(new URL('..', import.meta.url).pathname)
 const manifest = JSON.parse(readFileSync(resolve(projectRoot, 'package.json'), 'utf8'))
-const tarball = resolve(projectRoot, `${manifest.name}-${manifest.version}.tgz`)
+const tarballName = `${manifest.name.replace(/^@/u, '').replace('/', '-')}-${manifest.version}.tgz`
+const tarball = resolve(projectRoot, tarballName)
 const temporaryRoot = mkdtempSync(join(tmpdir(), 'fylar-office-dsh-smoke-'))
 const dshHome = join(temporaryRoot, 'home')
 const npmCache = join(temporaryRoot, 'npm-cache')
