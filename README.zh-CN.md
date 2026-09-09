@@ -37,7 +37,7 @@
 
 ### 环境要求
 
-- 使用 npm `latest` 渠道的 DeepSeek Harness。本版本的开发依赖精确固定为 `0.1.1-rc.2`；alpha 版本单独用于评估后续改动，不属于正式支持的用户环境。
+- 使用 npm `latest` 渠道的 DeepSeek Harness。本版本的开发依赖精确固定为 `0.1.2-rc.1`；alpha 版本单独用于评估后续改动，不属于正式支持的用户环境。
 - Node.js `^22.19.0 || >=24.0.0`。
 - DSH Web profile。
 - 浏览器支持 Worker、SharedWorker、WebAssembly、IndexedDB、Blob 和 ArrayBuffer。
@@ -137,7 +137,7 @@ Word 和 Excel 格式在以下条件全部满足时可以导出 PDF：
 替换已安装版本时，先停止 DSH，移除当前插件，再安装当前 npm 包版本并重启：
 
 ```bash
-npx @deepseek-ai/dsh plugin --profile web remove dsh-fylar-office-editor
+npx @deepseek-ai/dsh plugin --profile web remove @fylar/dsh-fylar-office-editor
 npx @deepseek-ai/dsh plugin --profile web add \
   @fylar/dsh-fylar-office-editor
 npx @deepseek-ai/dsh web
@@ -153,6 +153,6 @@ npx @deepseek-ai/dsh web
 
 ## 分发与声明
 
-本插件通过 npm registry 分发，并包含专有的 Fylar Office SDK runtime。SDK 受 [Fylar Office SDK 商业许可证](./vendor/office-sdk/legal.txt)、适用的订单以及其他书面商业协议约束，不属于开源软件。随附许可证为每个 License Credential 或关联客户账户提供合计最多 3,000 次 Metered Uses 的免费额度；额度用尽后，继续使用需要付费权益或其他书面商业许可。
+本插件通过 npm registry 分发，并包含专有的 Fylar Office SDK runtime。SDK 的 license 服务地址固定为 `https://openlicense.fylar.ai`。SDK 受 [Fylar Office SDK 商业许可证](./vendor/office-sdk/legal.txt)、适用的订单以及其他书面商业协议约束，不属于开源软件。随附许可证为每个 License Credential 或关联客户账户提供合计最多 3,000 次 Metered Uses 的免费额度；额度用尽后，继续使用需要付费权益或其他书面商业许可。
 
 第三方声明保留在 [THIRD_PARTY_NOTICES](./vendor/office-sdk/THIRD_PARTY_NOTICES)。使用或分发构建包前请阅读 [NOTICE.md](./NOTICE.md)。

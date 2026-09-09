@@ -1,7 +1,7 @@
 /** Browser plugin linking Agent-created Office files to Chat, Office, and details. */
 import type { Context as ClientContext } from '@deepseek-ai/cordis'
-import type {} from '@deepseek-ai/dsh-client-runtime/client'
 import type {} from '@deepseek-ai/dsh-client-locale/client'
+import type {} from '@deepseek-ai/dsh-client-ui-conversation/client'
 import type {} from '@deepseek-ai/dsh-client-ui-layout/client'
 import type {} from '@deepseek-ai/dsh-client-ui-renderer/client'
 import type {} from '@deepseek-ai/dsh-client-ui-tool/client'
@@ -20,7 +20,7 @@ import { OfficeLayoutLease } from './layout-interop.ts'
 import { en, OFFICE_LOCALE_NS, zh } from './locales.ts'
 
 /** Browser services required for Tool status, Chat delivery, Office, and details. */
-export const inject = ['slots', 'layout', 'locale', 'conversationEvents']
+export const inject = ['slots', 'layout', 'locale', 'uiConversation']
 
 /** Register one Office session across Chat, the Office view, and on-demand details. */
 export function apply(ctx: ClientContext): void {
@@ -85,7 +85,7 @@ export function apply(ctx: ClientContext): void {
   ctx.effect(() => ctx.locale.register(OFFICE_LOCALE_NS, { zh, en }), 'dsh-fylar-office-editor: dictionaries')
   ctx.effect(() => installOfficeStyles(), 'dsh-fylar-office-editor: styles')
   ctx.effect(() => () => { void controller.dispose() }, 'dsh-fylar-office-editor: workspace linkage')
-  ctx.conversationEvents.register(officeDeliverablesDefinition)
+  ctx.uiConversation.events.register(officeDeliverablesDefinition)
   for (const key of ['office_create_docx', 'office_present_file']) {
     ctx.slots.inject('tool.call.toolview', () => ctx.slots.register({
       name: 'tool.call.toolview',

@@ -27,7 +27,7 @@ runInNewContext(client, {
 assert.equal(registrations.length, 1, 'Client must register one DSH module')
 const [registration] = registrations
 assert.equal(manifest.name, PACKAGE_NAME)
-assert.equal(registration.id, PLUGIN_ID)
+assert.equal(registration.id, PACKAGE_NAME)
 const plugin = registration.factory(request => {
   assert.ok(platformModules.has(request), `Client requests an undeclared DSH module: ${request}`)
   return require(request)
@@ -40,6 +40,8 @@ assert.equal(typeof host.apply, 'function', 'Host must export apply')
 assert.equal(manifest.dsh?.bundle?.patch, './cordis.patch.yml')
 assert.equal(manifest.dsh?.client?.external?.length ?? 0, 0, 'Non-platform Client dependencies must be bundled')
 assert.ok(manifest.dsh?.client?.inject?.includes('@deepseek-ai/dsh-client-locale'), 'Client requires the DSH locale service')
+assert.ok(manifest.dsh?.client?.inject?.includes('@deepseek-ai/dsh-client-ui-chat'), 'Client requires the DSH Chat slots')
+assert.ok(manifest.dsh?.client?.inject?.includes('@deepseek-ai/dsh-client-ui-conversation'), 'Client requires the DSH Conversation service')
 for (const lifecycle of ['prepare', 'prepack', 'preinstall', 'install', 'postinstall']) {
   assert.equal(manifest.scripts?.[lifecycle], undefined, `Repository installs must not execute ${lifecycle}`)
 }

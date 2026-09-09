@@ -1,6 +1,6 @@
 /** Turn-scoped Office outputs and their assistant-tail file cards. */
-import type { ConversationNodeDefinition } from '@deepseek-ai/dsh-client-runtime/client';
-import type { TurnTailOwnerProps } from '@deepseek-ai/dsh-client-ui-conversation/client';
+import type { ConversationNodeDefinition } from '@deepseek-ai/dsh-client-ui-conversation/client';
+import type { TurnTailOwnerProps } from '@deepseek-ai/dsh-client-ui-chat/client';
 import type { InjectFace, PropsLocale, PropsRuntime } from '@deepseek-ai/dsh-client-ui-slots';
 import type { OfficeArtifactTarget, OfficeSessionSnapshot } from './office-artifact-controller.ts';
 import type { ObservableSnapshot, OfficeWorkspaceActions, OfficeWorkspaceSnapshot } from './office-workspace.ts';
@@ -10,7 +10,7 @@ export interface OfficeDeliverablesTurnData extends OfficeDeliverablesData {
 }
 /** Conversation Definition kind and the Turn-data key it exclusively owns. */
 export declare const OFFICE_DELIVERABLES_KIND = "fylar-office-deliverables";
-declare module '@deepseek-ai/dsh-client-runtime/client' {
+declare module '@deepseek-ai/dsh-client-ui-conversation/client' {
     interface ConversationTurnDataMap {
         /** Office files created or published by a dsh-fylar-office-editor Tool in this turn. */
         'fylar-office-deliverables': OfficeDeliverablesTurnData;

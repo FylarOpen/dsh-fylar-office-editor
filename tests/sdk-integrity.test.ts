@@ -8,6 +8,10 @@ import {
 } from '../scripts/lib/sdk-integrity.mjs'
 
 describe('vendored Office SDK integrity', () => {
+  it('pins the public license endpoint', () => {
+    expect(OFFICE_SDK_LICENSE_ENDPOINT).toBe('https://openlicense.fylar.ai')
+  })
+
   it('rejects drift in separately packed root legal notices', async () => {
     const vendorRoot = await mkdtemp(join(tmpdir(), 'fylar-office-notices-'))
     try {

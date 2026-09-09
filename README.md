@@ -37,7 +37,7 @@ The bundled SDK is proprietary commercial software. Each License Credential or a
 
 ### Requirements
 
-- DeepSeek Harness from the npm `latest` channel. This release's exact development baseline is `0.1.1-rc.2`; alpha builds are evaluated separately for upcoming changes and are not a supported user environment.
+- DeepSeek Harness from the npm `latest` channel. This release's exact development baseline is `0.1.2-rc.1`; alpha builds are evaluated separately for upcoming changes and are not a supported user environment.
 - Node.js `^22.19.0 || >=24.0.0`.
 - The DSH Web profile.
 - A modern browser with Worker, SharedWorker, WebAssembly, IndexedDB, Blob, and ArrayBuffer support.
@@ -137,7 +137,7 @@ When the environment does not qualify, the PDF action is disabled and the plugin
 To replace an existing installation, stop DSH, remove the current plugin row, install the current npm package version, and restart:
 
 ```bash
-npx @deepseek-ai/dsh plugin --profile web remove dsh-fylar-office-editor
+npx @deepseek-ai/dsh plugin --profile web remove @fylar/dsh-fylar-office-editor
 npx @deepseek-ai/dsh plugin --profile web add \
   @fylar/dsh-fylar-office-editor
 npx @deepseek-ai/dsh web
@@ -153,6 +153,6 @@ npx @deepseek-ai/dsh web
 
 ## Distribution and notices
 
-This plugin is distributed through the npm registry and includes the proprietary Fylar Office SDK runtime. The SDK is governed by the [Fylar Office SDK Commercial License](./vendor/office-sdk/legal.txt), any applicable order form, and any separate written commercial agreement. It is not open-source software. The bundled license provides an aggregate maximum of 3,000 Metered Uses per License Credential or associated customer account; continued use requires a paid entitlement or another written commercial license after that allowance is exhausted.
+This plugin is distributed through the npm registry and includes the proprietary Fylar Office SDK runtime. The SDK license service endpoint is fixed at `https://openlicense.fylar.ai`. The SDK is governed by the [Fylar Office SDK Commercial License](./vendor/office-sdk/legal.txt), any applicable order form, and any separate written commercial agreement. It is not open-source software. The bundled license provides an aggregate maximum of 3,000 Metered Uses per License Credential or associated customer account; continued use requires a paid entitlement or another written commercial license after that allowance is exhausted.
 
 Third-party notices are preserved in [THIRD_PARTY_NOTICES](./vendor/office-sdk/THIRD_PARTY_NOTICES). See [NOTICE.md](./NOTICE.md) before using or redistributing a packaged build.

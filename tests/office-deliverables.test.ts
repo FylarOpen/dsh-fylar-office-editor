@@ -34,7 +34,7 @@ describe('Office deliverables conversation definition', () => {
       start: undefined,
       state: { turn: 1, calls: new Map(), produced: [] },
       current: new Map(),
-    }, 'turn')
+    }, 'turn', null)
 
     expect(data).toEqual({
       kind: 'turn',

@@ -34,7 +34,7 @@ describe('Office client registration', () => {
       slots,
       locale,
       layout: { openDetails: vi.fn(), closeDetails: vi.fn(), toggleSidebar: vi.fn() },
-      conversationEvents: { register: conversationRegister },
+      uiConversation: { events: { register: conversationRegister } },
       effect: vi.fn((setup: () => void | (() => void)) => {
         const cleanup = setup()
         if (typeof cleanup === 'function') cleanups.push(cleanup)
@@ -44,8 +44,8 @@ describe('Office client registration', () => {
     apply(ctx as never)
 
     expect(inject).toContain('locale')
-    expect(inject).not.toContain('uiConversation')
-    expect(inject).toContain('conversationEvents')
+    expect(inject).toContain('uiConversation')
+    expect(inject).not.toContain('conversationEvents')
     expect(locale.register).toHaveBeenCalledWith(OFFICE_LOCALE_NS, { zh, en })
     const officeView = registrations.find(item => item.name === 'conversation.view')
     expect(officeView).toMatchObject({ id: 'office', order: 5, label: 'Office', locale: OFFICE_LOCALE_NS })

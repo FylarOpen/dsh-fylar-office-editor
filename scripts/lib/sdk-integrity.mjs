@@ -34,7 +34,7 @@ export const REQUIRED_SDK_PATHS = [
   'THIRD_PARTY_NOTICES',
 ]
 
-export const OFFICE_SDK_LICENSE_ENDPOINT = 'https://licenseopen.fylar.ai'
+export const OFFICE_SDK_LICENSE_ENDPOINT = 'https://openlicense.fylar.ai'
 
 export function sha256(data) {
   return createHash('sha256').update(data).digest('hex')

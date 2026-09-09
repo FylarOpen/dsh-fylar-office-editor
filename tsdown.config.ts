@@ -1,6 +1,6 @@
 import type { UserConfig } from 'tsdown'
 
-const PACKAGE_ID = 'dsh-fylar-office-editor'
+const PACKAGE_ID = '@fylar/dsh-fylar-office-editor'
 const CLIENT_EXTERNALS = new Set([
   'react',
   'react/jsx-runtime',
