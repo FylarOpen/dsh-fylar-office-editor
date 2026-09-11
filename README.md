@@ -37,7 +37,7 @@ The bundled SDK is proprietary commercial software. Each License Credential or a
 
 ### Requirements
 
-- DeepSeek Harness from the npm `latest` channel. This release's exact development baseline is `0.1.2-rc.1`; alpha builds are evaluated separately for upcoming changes and are not a supported user environment.
+- DeepSeek Harness `0.1.5-rc.1`. This release uses the right-Sidebar tab API introduced by the `0.1.5` release candidate line.
 - Node.js `^22.19.0 || >=24.0.0`.
 - The DSH Web profile.
 - A modern browser with Worker, SharedWorker, WebAssembly, IndexedDB, Blob, and ArrayBuffer support.
@@ -48,15 +48,13 @@ The bundled SDK is proprietary commercial software. Each License Credential or a
 Stop the currently running DSH process, then install the plugin package:
 
 ```bash
-npx @deepseek-ai/dsh plugin --profile web add \
-  @fylar/dsh-fylar-office-editor
+npx @deepseek-ai/dsh plugin --profile web add @fylar/dsh-fylar-office-editor
 ```
 
 If running DSH from its source repository, use the repository script instead:
 
 ```bash
-pnpm dsh plugin --profile web add \
-  @fylar/dsh-fylar-office-editor
+pnpm dsh plugin --profile web add @fylar/dsh-fylar-office-editor
 ```
 
 The npm package includes its verified `lib/` output and SDK runtime, so users do not need to clone or build the plugin.
@@ -138,14 +136,13 @@ To replace an existing installation, stop DSH, remove the current plugin row, in
 
 ```bash
 npx @deepseek-ai/dsh plugin --profile web remove @fylar/dsh-fylar-office-editor
-npx @deepseek-ai/dsh plugin --profile web add \
-  @fylar/dsh-fylar-office-editor
+npx @deepseek-ai/dsh plugin --profile web add @fylar/dsh-fylar-office-editor
 npx @deepseek-ai/dsh web
 ```
 
 ## Current limits
 
-- Public compatibility follows the DSH npm `latest` channel; the repository lockfile pins the exact development baseline, while alpha evaluation is only an early warning for a future plugin update.
+- This release supports DSH `0.1.5-rc.1` through the `0.1.5` line; later DSH API changes may require another plugin release.
 - Only DOCX has a dedicated agent-side content generator in this release.
 - Browser edits must be downloaded; they are not synchronized back to the workspace file.
 - The plugin keeps one active document per page rather than one document per DSH task.

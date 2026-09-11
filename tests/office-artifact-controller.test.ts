@@ -1,9 +1,6 @@
 // @vitest-environment jsdom
 import { describe, expect, it, vi } from 'vitest'
-import type { ILayout } from '@deepseek-ai/dsh-client-ui-layout/client'
-import {
-  OfficeSessionController, type OfficeLayoutLeaseLike, workspaceOfficeUrl,
-} from '../src/client/office-artifact-controller.ts'
+import { OfficeSessionController, workspaceOfficeUrl } from '../src/client/office-artifact-controller.ts'
 import { officeFilesForClosing } from '../src/client/office-deliverables-model.ts'
 import { officeArtifactRowModel } from '../src/client/OfficeArtifactRow.tsx'
 import type { OfficeWorkspace, OfficeWorkspaceSnapshot } from '../src/client/office-workspace.ts'
@@ -23,11 +20,7 @@ function workspace(snapshot: OfficeWorkspaceSnapshot) {
 }
 
 function dependencies() {
-  const layout = { openDetails: vi.fn(), closeDetails: vi.fn(), toggleSidebar: vi.fn() } satisfies ILayout
-  const lease = {
-    acquire: vi.fn(() => true), release: vi.fn(() => true), dispose: vi.fn(),
-  } satisfies OfficeLayoutLeaseLike
-  return { layout, lease, show: vi.fn(), release: vi.fn() }
+  return { panel: { open: vi.fn(), close: vi.fn() } }
 }
 
 const ready = (hasPotentialEdits = false): OfficeWorkspaceSnapshot => ({
@@ -39,15 +32,13 @@ describe('Office session linkage', () => {
   it('opens a generated file in details only after a valid Workspace target', async () => {
     const office = workspace({ status: 'empty' })
     const d = dependencies()
-    const controller = new OfficeSessionController(office, d.layout, d.lease, d.show, d.release)
+    const controller = new OfficeSessionController(office, d.panel)
 
     await controller.openDetails({ path: 'reports/summary.docx' })
-    expect(d.lease.acquire).not.toHaveBeenCalled()
-    expect(d.layout.openDetails).not.toHaveBeenCalled()
+    expect(d.panel.open).not.toHaveBeenCalled()
 
     await controller.openDetails({ path: 'reports/summary.docx', cwd: '/workspace' })
-    expect(d.lease.acquire).toHaveBeenCalledOnce()
-    expect(d.show).toHaveBeenCalledOnce()
+    expect(d.panel.open).toHaveBeenCalledOnce()
     expect(office.openUrl).toHaveBeenCalledWith(
       'summary.docx', workspaceOfficeUrl('/workspace', 'reports/summary.docx'),
     )
@@ -56,7 +47,7 @@ describe('Office session linkage', () => {
     })
   })
 
-  it('restores sidebar ownership after a details load failure and reacquires it for retry', async () => {
+  it('keeps the right-Sidebar tab open after a load failure and retries in place', async () => {
     const office = workspace({ status: 'empty' })
     const d = dependencies()
     vi.mocked(office.openUrl).mockImplementation(async () => {
@@ -65,20 +56,19 @@ describe('Office session linkage', () => {
         issue: { kind: 'open', retryable: true },
       })
     })
-    const controller = new OfficeSessionController(office, d.layout, d.lease, d.show, d.release)
+    const controller = new OfficeSessionController(office, d.panel)
     await controller.openDetails({ path: 'broken.docx', cwd: '/workspace' })
-    expect(d.lease.acquire).toHaveBeenCalledOnce()
-    expect(d.lease.release).toHaveBeenCalledOnce()
+    expect(d.panel.open).toHaveBeenCalledOnce()
+    expect(d.panel.close).not.toHaveBeenCalled()
     await controller.retry()
-    expect(d.lease.acquire).toHaveBeenCalledTimes(2)
-    expect(d.lease.release).toHaveBeenCalledTimes(2)
-    expect(d.release).not.toHaveBeenCalled()
+    expect(office.retry).toHaveBeenCalledOnce()
+    expect(d.panel.open).toHaveBeenCalledOnce()
   })
 
   it('moves one live Workspace document without reopening the SDK', async () => {
     const office = workspace({ status: 'empty' })
     const d = dependencies()
-    const controller = new OfficeSessionController(office, d.layout, d.lease, d.show, d.release)
+    const controller = new OfficeSessionController(office, d.panel)
     await controller.openInline({ path: 'same.docx', cwd: '/workspace' })
     office.setSnapshot(ready())
     await controller.openDetails({ path: 'same.docx', cwd: '/workspace' })
@@ -86,7 +76,7 @@ describe('Office session linkage', () => {
     expect(controller.source.getSnapshot().current?.presentation).toBe('details')
     controller.activateOfficeView()
     expect(controller.source.getSnapshot().current?.presentation).toBe('office-view')
-    expect(d.lease.release).toHaveBeenCalled()
+    expect(d.panel.close).toHaveBeenCalled()
     controller.parkOfficeView()
     expect(controller.source.getSnapshot().current?.presentation).toBe('parked')
     expect(office.close).not.toHaveBeenCalled()
@@ -95,7 +85,7 @@ describe('Office session linkage', () => {
   it('replaces the current document directly even when it may contain edits', async () => {
     const office = workspace({ status: 'empty' })
     const d = dependencies()
-    const controller = new OfficeSessionController(office, d.layout, d.lease, d.show, d.release)
+    const controller = new OfficeSessionController(office, d.panel)
     await controller.openInline({ path: 'old.docx', cwd: '/workspace' })
     office.setSnapshot(ready(true))
 
@@ -109,7 +99,7 @@ describe('Office session linkage', () => {
   it('opens local files and creates all document types in the Office view', async () => {
     const office = workspace({ status: 'empty' })
     const d = dependencies()
-    const controller = new OfficeSessionController(office, d.layout, d.lease, d.show, d.release)
+    const controller = new OfficeSessionController(office, d.panel)
     const file = new File(['x'], 'sheet.xlsx')
     await controller.openLocal(file)
     expect(office.open).toHaveBeenCalledWith(file)
@@ -121,15 +111,26 @@ describe('Office session linkage', () => {
     expect(controller.source.getSnapshot().current).toMatchObject({ source: { kind: 'created', docType: 3 } })
   })
 
-  it('closes directly and restores layout ownership', async () => {
+  it('closes the native right-Sidebar tab and the Office workspace directly', async () => {
     const office = workspace(ready(true))
     const d = dependencies()
-    const controller = new OfficeSessionController(office, d.layout, d.lease, d.show, d.release)
+    const controller = new OfficeSessionController(office, d.panel)
     await controller.close()
     expect(office.close).toHaveBeenCalledOnce()
-    expect(d.layout.closeDetails).toHaveBeenCalledOnce()
-    expect(d.lease.release).toHaveBeenCalledOnce()
+    expect(d.panel.close).toHaveBeenCalledOnce()
     expect(controller.source.getSnapshot().current).toBeNull()
+  })
+
+  it('parks the document when DSH closes its native right-Sidebar tab', async () => {
+    const office = workspace({ status: 'empty' })
+    const d = dependencies()
+    const controller = new OfficeSessionController(office, d.panel)
+    await controller.openDetails({ path: 'notes.docx', cwd: '/workspace' })
+
+    controller.detailsPanelClosed()
+
+    expect(controller.source.getSnapshot().current?.presentation).toBe('parked')
+    expect(office.close).not.toHaveBeenCalled()
   })
 
   it('derives stable running, success, and failure status states', () => {

@@ -1,5 +1,6 @@
-/** Fylar Office editor hosted in DSH's right details column. */
-import type {} from '@deepseek-ai/dsh-client-ui-layout/client'
+/** Fylar Office editor hosted in a DSH right-Sidebar tab. */
+import { useEffect } from 'react'
+import type { TabId } from '@deepseek-ai/dsh-client-ui-sidebar-right/client'
 import type { InjectFace, PropsLocale, PropsRuntime } from '@deepseek-ai/dsh-client-ui-slots'
 import type { ObservableSnapshot, OfficeWorkspaceActions, OfficeWorkspaceSnapshot } from './office-workspace.ts'
 import type { OfficeSessionSnapshot } from './office-artifact-controller.ts'
@@ -16,19 +17,30 @@ export interface OfficeDetailsInjected extends Pick<
   }
   retrySession: () => Promise<void>
   closePanel: () => void
+  panelOpened: (tabId: TabId) => void
+  panelClosed: (tabId: TabId) => void
 }
 
-export type OfficeDetailsPanelProps = PropsRuntime<'details'>
+export type OfficeDetailsPanelProps = PropsRuntime<'sidebar.right.pane.tab'>
   & PropsLocale<typeof OFFICE_LOCALE_NS>
   & InjectFace<OfficeDetailsInjected>
 
 /** Render the persistent SDK root plus compact edit/export controls. */
 export function OfficeDetailsPanel({
   useWorkspace, useOfficeSession, attach, detach, retrySession, setReadOnly,
-  exportDocument, exportPdf, clearIssue, markPotentialEdits, closePanel, t = zhT,
+  exportDocument, exportPdf, clearIssue, markPotentialEdits, closePanel,
+  panelOpened, panelClosed, useTabInfo, t = zhT,
 }: OfficeDetailsPanelProps) {
+  const { tab } = useTabInfo()
   const snapshot = useWorkspace(value => value)
   const current = useOfficeSession(value => value.current)
+  useEffect(() => {
+    panelOpened(tab.id)
+    const handleClose = (): void => { panelClosed(tab.id) }
+    if (tab.signal.aborted) handleClose()
+    else tab.signal.addEventListener('abort', handleClose, { once: true })
+    return () => { tab.signal.removeEventListener('abort', handleClose) }
+  }, [panelClosed, panelOpened, tab.id, tab.signal])
   return (
     <OfficeEditorSurface
       snapshot={snapshot}

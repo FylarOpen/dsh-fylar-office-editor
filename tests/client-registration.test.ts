@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { describe, expect, it, vi } from 'vitest'
-import { apply, inject } from '../src/client/index.ts'
+import { apply, inject, OFFICE_RIGHTBAR_ID, OFFICE_RIGHTBAR_KIND } from '../src/client/index.ts'
 import { en, OFFICE_LOCALE_NS, zh } from '../src/client/locales.ts'
 
 vi.mock('@deepseek-ai/dsh-session/surface', () => ({
@@ -17,6 +17,12 @@ interface SlotRegistration {
   readonly inject?: () => unknown
 }
 
+interface TabDefinition {
+  readonly id: string
+  readonly kind: string
+  readonly title: () => string
+}
+
 describe('Office client registration', () => {
   it('registers the fixed Office view and shares one Workspace source with Chat delivery', async () => {
     const registrations: SlotRegistration[] = []
@@ -28,12 +34,20 @@ describe('Office client registration', () => {
       }),
       inject: vi.fn((_name: string, register: () => void) => { register() }),
     }
-    const locale = { register: vi.fn(() => () => undefined) }
+    const locale = {
+      register: vi.fn(() => () => undefined),
+      bind: vi.fn(() => (key: string) => key === 'view.label' ? 'Office' : key),
+    }
     const conversationRegister = vi.fn(() => () => undefined)
+    const tabRegister = vi.fn((_definition: TabDefinition) => () => undefined)
+    const sidebarRight = {
+      openTab: vi.fn(), active: vi.fn(), close: vi.fn(),
+    }
     const ctx = {
       slots,
       locale,
-      layout: { openDetails: vi.fn(), closeDetails: vi.fn(), toggleSidebar: vi.fn() },
+      sidebarRight,
+      sidebarRightTabs: { register: tabRegister },
       uiConversation: { events: { register: conversationRegister } },
       effect: vi.fn((setup: () => void | (() => void)) => {
         const cleanup = setup()
@@ -45,6 +59,8 @@ describe('Office client registration', () => {
 
     expect(inject).toContain('locale')
     expect(inject).toContain('uiConversation')
+    expect(inject).toContain('sidebarRight')
+    expect(inject).toContain('sidebarRightTabs')
     expect(inject).not.toContain('conversationEvents')
     expect(locale.register).toHaveBeenCalledWith(OFFICE_LOCALE_NS, { zh, en })
     const officeView = registrations.find(item => item.name === 'conversation.view')
@@ -66,6 +82,14 @@ describe('Office client registration', () => {
     expect(registrations.filter(item => item.name === 'tool.call.toolview').every(item => item.locale === OFFICE_LOCALE_NS)).toBe(true)
     expect(delivery).toMatchObject({ locale: OFFICE_LOCALE_NS })
     expect(registrations.some(item => item.name === 'shell.overlay')).toBe(false)
+    expect(tabRegister).toHaveBeenCalledOnce()
+    const definition = tabRegister.mock.calls[0]?.[0]
+    expect(definition).toMatchObject({ id: OFFICE_RIGHTBAR_ID, kind: OFFICE_RIGHTBAR_KIND })
+    expect(definition?.title()).toBe('Office')
+    expect(registrations.find(item => item.name === 'sidebar.right.pane.tab')).toMatchObject({
+      key: OFFICE_RIGHTBAR_ID,
+      locale: OFFICE_LOCALE_NS,
+    })
 
     for (const cleanup of cleanups.reverse()) cleanup()
     await Promise.resolve()

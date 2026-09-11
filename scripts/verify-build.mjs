@@ -42,6 +42,9 @@ assert.equal(manifest.dsh?.client?.external?.length ?? 0, 0, 'Non-platform Clien
 assert.ok(manifest.dsh?.client?.inject?.includes('@deepseek-ai/dsh-client-locale'), 'Client requires the DSH locale service')
 assert.ok(manifest.dsh?.client?.inject?.includes('@deepseek-ai/dsh-client-ui-chat'), 'Client requires the DSH Chat slots')
 assert.ok(manifest.dsh?.client?.inject?.includes('@deepseek-ai/dsh-client-ui-conversation'), 'Client requires the DSH Conversation service')
+assert.ok(manifest.dsh?.client?.inject?.includes('@deepseek-ai/dsh-client-ui-sidebar-right'), 'Client requires the DSH right-Sidebar service')
+assert.ok(plugin.inject.includes('sidebarRight'), 'Client must inject the right-Sidebar controller')
+assert.ok(plugin.inject.includes('sidebarRightTabs'), 'Client must inject the right-Sidebar tab registry')
 for (const lifecycle of ['prepare', 'prepack', 'preinstall', 'install', 'postinstall']) {
   assert.equal(manifest.scripts?.[lifecycle], undefined, `Repository installs must not execute ${lifecycle}`)
 }

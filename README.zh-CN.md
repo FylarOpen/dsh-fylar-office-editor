@@ -37,7 +37,7 @@
 
 ### 环境要求
 
-- 使用 npm `latest` 渠道的 DeepSeek Harness。本版本的开发依赖精确固定为 `0.1.2-rc.1`；alpha 版本单独用于评估后续改动，不属于正式支持的用户环境。
+- DeepSeek Harness `0.1.5-rc.1`。本版本已迁移到 `0.1.5` 候选版本引入的右侧栏页签 API。
 - Node.js `^22.19.0 || >=24.0.0`。
 - DSH Web profile。
 - 浏览器支持 Worker、SharedWorker、WebAssembly、IndexedDB、Blob 和 ArrayBuffer。
@@ -48,15 +48,13 @@
 先停止正在运行的 DSH，再安装插件包：
 
 ```bash
-npx @deepseek-ai/dsh plugin --profile web add \
-  @fylar/dsh-fylar-office-editor
+npx @deepseek-ai/dsh plugin --profile web add @fylar/dsh-fylar-office-editor
 ```
 
 如果从 DSH 源码仓库运行，则在 DSH 源码根目录执行：
 
 ```bash
-pnpm dsh plugin --profile web add \
-  @fylar/dsh-fylar-office-editor
+pnpm dsh plugin --profile web add @fylar/dsh-fylar-office-editor
 ```
 
 npm 包已经包含验证过的 `lib/` 构建产物和 SDK runtime，普通用户不需要克隆或构建插件。
@@ -138,14 +136,13 @@ Word 和 Excel 格式在以下条件全部满足时可以导出 PDF：
 
 ```bash
 npx @deepseek-ai/dsh plugin --profile web remove @fylar/dsh-fylar-office-editor
-npx @deepseek-ai/dsh plugin --profile web add \
-  @fylar/dsh-fylar-office-editor
+npx @deepseek-ai/dsh plugin --profile web add @fylar/dsh-fylar-office-editor
 npx @deepseek-ai/dsh web
 ```
 
 ## 当前限制
 
-- 对外兼容跟随 DSH npm `latest` 渠道；仓库 lockfile 精确固定开发基线，alpha 评估只用于提前发现下一版插件需要处理的问题。
+- 本版本支持 DSH `0.1.5-rc.1` 至 `0.1.5` 版本线；后续 DSH API 变更可能需要再次发布插件版本。
 - 当前只有 DOCX 提供专用的 Agent 内容生成工具。
 - 浏览器内编辑必须下载保存，不会同步覆盖工作区原文件。
 - 每个页面只保留一个活动文档，而不是每个 DSH 任务分别保留一个文档。

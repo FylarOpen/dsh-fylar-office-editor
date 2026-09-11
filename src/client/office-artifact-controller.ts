@@ -1,5 +1,4 @@
-/** Global browser session linking Chat artifacts, the Office tab, and details. */
-import type { ILayout } from '@deepseek-ai/dsh-client-ui-layout/client'
+/** Global browser session linking Chat artifacts, the Office tab, and the right Sidebar. */
 import { createdFileName, inferOfficeDocType, officeBaseName } from './office-files.ts'
 import type { ObservableSnapshot, OfficeWorkspace } from './office-workspace.ts'
 import type { OfficeDocType } from './office-types.ts'
@@ -34,10 +33,9 @@ export interface OfficeArtifactTarget {
   readonly cwd?: string | undefined
 }
 
-export interface OfficeLayoutLeaseLike {
-  acquire(): boolean
-  release(): boolean
-  dispose(): void
+export interface OfficeDetailsPanelLike {
+  open(): void
+  close(): void
 }
 
 function isSameWorkspaceSource(source: OfficeDocumentSource, target: OfficeArtifactTarget): boolean {
@@ -64,10 +62,7 @@ export class OfficeSessionController {
 
   constructor(
     private readonly workspace: OfficeWorkspace,
-    private readonly layout: ILayout,
-    private readonly layoutLease: OfficeLayoutLeaseLike,
-    private readonly showPanel: () => void,
-    private readonly releasePanel: () => void,
+    private readonly detailsPanel: OfficeDetailsPanelLike,
   ) {}
 
   private publish(change: Partial<OfficeSessionSnapshot>): void {
@@ -76,17 +71,12 @@ export class OfficeSessionController {
   }
 
   private present(selection: OfficeSessionSelection): void {
+    this.publish({ current: selection })
     if (selection.presentation === 'details') {
-      this.layoutLease.acquire()
-      this.publish({ current: selection })
-      this.showPanel()
-      this.layout.openDetails()
+      this.detailsPanel.open()
       return
     }
-    this.layout.closeDetails()
-    this.layoutLease.release()
-    this.releasePanel()
-    this.publish({ current: selection })
+    this.detailsPanel.close()
   }
 
   private async openWorkspaceNow(target: { path: string; cwd: string }, presentation: 'details' | 'inline'): Promise<void> {
@@ -101,9 +91,6 @@ export class OfficeSessionController {
     }
     this.present({ source, presentation })
     await this.workspace.openUrl(fileName, source.url)
-    if (presentation === 'details' && this.workspace.source.getSnapshot().status === 'error') {
-      this.layoutLease.release()
-    }
   }
 
   private async openWorkspace(target: OfficeArtifactTarget, presentation: 'details' | 'inline'): Promise<void> {
@@ -165,32 +152,30 @@ export class OfficeSessionController {
     this.publish({ current: { ...current, presentation: 'parked' } })
   }
 
-  async retry(): Promise<void> {
+  /** Keep the document alive when DSH closes its native right-Sidebar tab. */
+  detailsPanelClosed(): void {
     const current = this.snapshot.current
-    if (current?.presentation === 'details') this.layoutLease.acquire()
+    if (this.disposed || current?.presentation !== 'details') return
+    this.publish({ current: { ...current, presentation: 'parked' } })
+  }
+
+  async retry(): Promise<void> {
     await this.workspace.retry()
-    if (current?.presentation === 'details' && this.workspace.source.getSnapshot().status === 'error') {
-      this.layoutLease.release()
-    }
   }
 
   async close(): Promise<void> {
     if (this.disposed) return
-    this.layout.closeDetails()
-    this.layoutLease.release()
-    await this.workspace.close()
     this.publish({ current: null })
-    this.releasePanel()
+    this.detailsPanel.close()
+    await this.workspace.close()
   }
 
   async dispose(): Promise<void> {
     if (this.disposed) return
     this.disposed = true
-    this.layout.closeDetails()
-    this.layoutLease.dispose()
+    this.detailsPanel.close()
     await this.workspace.dispose()
     this.snapshot = { current: null }
-    this.releasePanel()
     this.listeners.clear()
   }
 }
