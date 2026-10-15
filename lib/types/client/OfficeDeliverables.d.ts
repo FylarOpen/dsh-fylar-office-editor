@@ -1,6 +1,4 @@
-/** Turn-scoped Office outputs and their assistant-tail file cards. */
 import type { ConversationNodeDefinition } from '@deepseek-ai/dsh-client-ui-conversation/client';
-import type { TurnTailOwnerProps } from '@deepseek-ai/dsh-client-ui-chat/client';
 import type { InjectFace, PropsLocale, PropsRuntime } from '@deepseek-ai/dsh-client-ui-slots';
 import type { OfficeArtifactTarget, OfficeSessionSnapshot } from './office-artifact-controller.ts';
 import type { ObservableSnapshot, OfficeWorkspaceActions, OfficeWorkspaceSnapshot } from './office-workspace.ts';
@@ -22,7 +20,6 @@ interface OfficeDeliverablesState extends OfficeDeliverablesTurnData {
 }
 /** Accumulate successful Office creation calls into their engine-owned Turn. */
 export declare const officeDeliverablesDefinition: ConversationNodeDefinition<OfficeDeliverablesState>;
-export declare function selectOfficeDeliverables(owner: TurnTailOwnerProps): readonly string[] | null;
 export interface OfficeDeliverablesInjected extends Pick<OfficeWorkspaceActions, 'attach' | 'detach' | 'setReadOnly' | 'exportDocument' | 'exportPdf' | 'clearIssue' | 'markPotentialEdits'> {
     hooks: {
         workspace: ObservableSnapshot<OfficeWorkspaceSnapshot>;
@@ -34,10 +31,8 @@ export interface OfficeDeliverablesInjected extends Pick<OfficeWorkspaceActions,
     closeDocument: () => void;
     retrySession: () => Promise<void>;
 }
-type OfficeDeliverablesProps = PropsRuntime<'conversation.chat.turnTail'> & {
-    matched: readonly string[];
-} & PropsLocale<typeof OFFICE_LOCALE_NS> & InjectFace<OfficeDeliverablesInjected>;
+type OfficeDeliverablesProps = PropsRuntime<'conversation.chat.turnTail'> & PropsLocale<typeof OFFICE_LOCALE_NS> & InjectFace<OfficeDeliverablesInjected>;
 /** Render successful files after the closing assistant response. */
-export declare function OfficeDeliverables({ matched, useSessions, sessionId, useWorkspace, useOfficeSession, openDetails, openInlineArtifact, collapseInline, closeDocument, retrySession, attach, detach, setReadOnly, exportDocument, exportPdf, clearIssue, markPotentialEdits, t, }: OfficeDeliverablesProps): import("react/jsx-runtime").JSX.Element;
+export declare function OfficeDeliverables({ turn, seq, useSessions, sessionId, useWorkspace, useOfficeSession, openDetails, openInlineArtifact, collapseInline, closeDocument, retrySession, attach, detach, setReadOnly, exportDocument, exportPdf, clearIssue, markPotentialEdits, t, }: OfficeDeliverablesProps): import("react/jsx-runtime").JSX.Element | null;
 export {};
 //# sourceMappingURL=OfficeDeliverables.d.ts.map

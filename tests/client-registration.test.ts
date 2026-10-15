@@ -80,7 +80,8 @@ describe('Office client registration', () => {
       'office_present_file',
     ])
     expect(registrations.filter(item => item.name === 'tool.call.toolview').every(item => item.locale === OFFICE_LOCALE_NS)).toBe(true)
-    expect(delivery).toMatchObject({ locale: OFFICE_LOCALE_NS })
+    expect(delivery).toMatchObject({ id: 'fylar-office-deliverables', order: -20, locale: OFFICE_LOCALE_NS })
+    expect(delivery).not.toHaveProperty('select')
     expect(registrations.some(item => item.name === 'shell.overlay')).toBe(false)
     expect(tabRegister).toHaveBeenCalledOnce()
     const definition = tabRegister.mock.calls[0]?.[0]

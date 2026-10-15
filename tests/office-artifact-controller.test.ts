@@ -134,8 +134,11 @@ describe('Office session linkage', () => {
   })
 
   it('derives stable running, success, and failure status states', () => {
-    const running = { callId: 'c1', name: 'office_create_docx', argsRaw: '{"file_path":"a.docx"}', subCalls: [] }
+    const running = { phase: 'start', callId: 'c1', name: 'office_create_docx', argsRaw: '{"file_path":"a.docx"}', subCalls: [] }
     expect(officeArtifactRowModel(running as never)).toEqual({ path: 'a.docx', state: 'running' })
+    expect(officeArtifactRowModel({
+      phase: 'preparing', callId: 'c1', name: 'office_create_docx', subCalls: [],
+    } as never)).toEqual({ path: undefined, state: 'running' })
     expect(officeArtifactRowModel({
       kind: 'tool-result', callId: 'c1', isError: false,
       call: { argsRaw: '{"file_path":"a.docx"}' }, content: [], subCalls: [],

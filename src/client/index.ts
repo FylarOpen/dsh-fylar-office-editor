@@ -9,7 +9,7 @@ import { OfficeSessionController } from './office-artifact-controller.ts'
 import { OfficeArtifactRow } from './OfficeArtifactRow.tsx'
 import {
   OfficeDeliverables, type OfficeDeliverablesInjected,
-  officeDeliverablesDefinition, selectOfficeDeliverables,
+  OFFICE_DELIVERABLES_KIND, officeDeliverablesDefinition,
 } from './OfficeDeliverables.tsx'
 import { OfficeDetailsPanel, type OfficeDetailsInjected } from './OfficeDetailsPanel.tsx'
 import { OfficeSdkLoader } from './office-sdk-loader.ts'
@@ -109,8 +109,8 @@ export function apply(ctx: ClientContext): void {
   }
   ctx.slots.inject('conversation.chat.turnTail', () => ctx.slots.register({
     name: 'conversation.chat.turnTail',
-    select: selectOfficeDeliverables,
-    priority: -20,
+    id: OFFICE_DELIVERABLES_KIND,
+    order: -20,
     locale: OFFICE_LOCALE_NS,
     inject: () => deliverablesInjected,
   }, OfficeDeliverables))

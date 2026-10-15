@@ -44,4 +44,18 @@ describe('Office deliverables conversation definition', () => {
     })
     expect(data?.key).toBe(officeDeliverablesDefinition.kind)
   })
+
+  it('uses the Tool result message outcome to exclude failed files', () => {
+    const state = { turn: 1, calls: new Map([['c1', 'report.docx']]), produced: [] }
+    const result = (isError: boolean) => ({
+      event: {
+        type: 'tool/result', seq: 7,
+        data: { message: { source: { callId: 'c1' }, content: [{ type: 'text', text: 'result' }], isError } },
+      },
+    })
+
+    expect(officeDeliverablesDefinition.update({ state } as never, result(true) as never)).toBe(state)
+    expect(officeDeliverablesDefinition.update({ state } as never, result(false) as never).produced)
+      .toEqual([{ path: 'report.docx', seq: 7 }])
+  })
 })

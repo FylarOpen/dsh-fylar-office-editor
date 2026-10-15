@@ -7,7 +7,7 @@ import { OFFICE_LOCALE_NS, zhT } from './locales.ts'
 export type OfficeArtifactRowProps = ToolCallViewProps & PropsLocale<typeof OFFICE_LOCALE_NS>
 
 interface ToolRowModel {
-  readonly path: string
+  readonly path: string | undefined
   readonly state: 'running' | 'ready' | 'error' | 'stopped'
 }
 
@@ -37,13 +37,13 @@ function pathFromArgs(raw: string): string {
 
 export function officeArtifactRowModel(block: ToolCallViewProps['block']): ToolRowModel {
   const settled = 'kind' in block
-  const raw = (settled ? block.call?.argsRaw : block.argsRaw) ?? ''
+  const raw = settled ? block.call?.argsRaw ?? '' : block.phase === 'start' ? block.argsRaw : undefined
   const state = !settled
     ? 'running'
     : block.error?.code === 'interrupted'
       ? 'stopped'
       : block.isError ? 'error' : 'ready'
-  return { path: pathFromArgs(raw), state }
+  return { path: raw === undefined ? undefined : pathFromArgs(raw), state }
 }
 
 /** Render generation progress only; the assistant-tail card is the file entry. */
@@ -59,7 +59,7 @@ export function OfficeArtifactRow({ block, toolName, t = zhT }: OfficeArtifactRo
     >
       <span className="fylar-office-tool-status-dot" aria-hidden />
       <span>{label}</span>
-      <small title={model.path}>{officeBaseName(model.path)}</small>
+      {model.path === undefined ? null : <small title={model.path}>{officeBaseName(model.path)}</small>}
     </div>
   )
 }

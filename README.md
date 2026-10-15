@@ -37,7 +37,7 @@ The bundled SDK is proprietary commercial software. Each License Credential or a
 
 ### Requirements
 
-- DeepSeek Harness `0.1.5-rc.1`. This release uses the right-Sidebar tab API introduced by the `0.1.5` release candidate line.
+- DeepSeek Harness Web; this release was verified with `0.2.0-rc.2`.
 - Node.js `^22.19.0 || >=24.0.0`.
 - The DSH Web profile.
 - A modern browser with Worker, SharedWorker, WebAssembly, IndexedDB, Blob, and ArrayBuffer support.
@@ -142,7 +142,7 @@ npx @deepseek-ai/dsh web
 
 ## Current limits
 
-- This release supports DSH `0.1.5-rc.1` through the `0.1.5` line; later DSH API changes may require another plugin release.
+- Installation does not restrict the DSH version. This release was verified with DSH `0.2.0-rc.2`; later API changes may still require adaptation.
 - Only DOCX has a dedicated agent-side content generator in this release.
 - Browser edits must be downloaded; they are not synchronized back to the workspace file.
 - The plugin keeps one active document per page rather than one document per DSH task.

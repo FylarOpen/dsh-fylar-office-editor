@@ -1,9 +1,6 @@
 /** Turn-scoped Office outputs and their assistant-tail file cards. */
-import type {
-  ConversationNodeDefinition,
-  ConversationTurnDataMap,
-} from '@deepseek-ai/dsh-client-ui-conversation/client'
-import type { TurnTailOwnerProps } from '@deepseek-ai/dsh-client-ui-chat/client'
+import { useSyncExternalStore } from 'react'
+import type { ConversationNodeDefinition } from '@deepseek-ai/dsh-client-ui-conversation/client'
 import { isAppendSurfaceEvent } from '@deepseek-ai/dsh-session/surface'
 import type { InjectFace, PropsLocale, PropsRuntime } from '@deepseek-ai/dsh-client-ui-slots'
 import type { OfficeArtifactTarget, OfficeSessionSelection, OfficeSessionSnapshot } from './office-artifact-controller.ts'
@@ -74,8 +71,7 @@ export const officeDeliverablesDefinition: ConversationNodeDefinition<OfficeDeli
       return { ...context.state, calls }
     }
     if (match.event.type !== 'tool/result') return context.state
-    const content = match.event.data.message.content[0]
-    if (content?.isError === true) return context.state
+    if (match.event.data.message.isError === true) return context.state
     const path = context.state.calls.get(String(match.event.data.message.source.callId))
     if (path === undefined || context.state.produced.some(item => item.path === path)) return context.state
     return { ...context.state, produced: [...context.state.produced, { path, seq: match.event.seq }] }
@@ -88,11 +84,6 @@ export const officeDeliverablesDefinition: ConversationNodeDefinition<OfficeDeli
       key: OFFICE_DELIVERABLES_KIND,
       value: { produced: context.state.produced },
     },
-}
-
-export function selectOfficeDeliverables(owner: TurnTailOwnerProps): readonly string[] | null {
-  const paths = officeFilesForClosing(owner.turn.data.get(OFFICE_DELIVERABLES_KIND), owner.seq)
-  return paths.length === 0 ? null : paths
 }
 
 export interface OfficeDeliverablesInjected extends Pick<
@@ -111,7 +102,6 @@ export interface OfficeDeliverablesInjected extends Pick<
 }
 
 type OfficeDeliverablesProps = PropsRuntime<'conversation.chat.turnTail'>
-  & { matched: readonly string[] }
   & PropsLocale<typeof OFFICE_LOCALE_NS>
   & InjectFace<OfficeDeliverablesInjected>
 
@@ -185,17 +175,21 @@ function ArtifactCard({
 
 /** Render successful files after the closing assistant response. */
 export function OfficeDeliverables({
-  matched, useSessions, sessionId, useWorkspace, useOfficeSession,
+  turn, seq, useSessions, sessionId, useWorkspace, useOfficeSession,
   openDetails, openInlineArtifact, collapseInline, closeDocument, retrySession,
   attach, detach, setReadOnly, exportDocument, exportPdf, clearIssue, markPotentialEdits,
   t = zhT,
 }: OfficeDeliverablesProps) {
+  const source = turn.data.source(OFFICE_DELIVERABLES_KIND)
+  const data = useSyncExternalStore(source.subscribe, source.getSnapshot)
+  const paths = officeFilesForClosing(data, seq)
   const cwd = useSessions(list => list.byId[sessionId]?.cwd)
   const workspace = useWorkspace(value => value)
   const session = useOfficeSession(value => value)
+  if (paths.length === 0) return null
   return (
     <div className="fylar-office-deliverables" aria-label={t('artifact.group')}>
-      {matched.map(path => {
+      {paths.map(path => {
         const target = { path, cwd }
         const current = session.current
         const inline = current?.presentation === 'inline' && isCurrentArtifact(current, path, cwd)

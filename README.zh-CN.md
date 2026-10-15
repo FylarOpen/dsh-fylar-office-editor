@@ -37,7 +37,7 @@
 
 ### 环境要求
 
-- DeepSeek Harness `0.1.5-rc.1`。本版本已迁移到 `0.1.5` 候选版本引入的右侧栏页签 API。
+- DeepSeek Harness Web；本次已验证版本为 `0.2.0-rc.2`。
 - Node.js `^22.19.0 || >=24.0.0`。
 - DSH Web profile。
 - 浏览器支持 Worker、SharedWorker、WebAssembly、IndexedDB、Blob 和 ArrayBuffer。
@@ -142,7 +142,7 @@ npx @deepseek-ai/dsh web
 
 ## 当前限制
 
-- 本版本支持 DSH `0.1.5-rc.1` 至 `0.1.5` 版本线；后续 DSH API 变更可能需要再次发布插件版本。
+- 安装时不限制 DSH 版本；本次已验证 DSH `0.2.0-rc.2`，后续 API 变更仍可能需要适配。
 - 当前只有 DOCX 提供专用的 Agent 内容生成工具。
 - 浏览器内编辑必须下载保存，不会同步覆盖工作区原文件。
 - 每个页面只保留一个活动文档，而不是每个 DSH 任务分别保留一个文档。

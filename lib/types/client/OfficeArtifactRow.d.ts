@@ -4,7 +4,7 @@ import type { PropsLocale } from '@deepseek-ai/dsh-client-ui-slots';
 import { OFFICE_LOCALE_NS } from './locales.ts';
 export type OfficeArtifactRowProps = ToolCallViewProps & PropsLocale<typeof OFFICE_LOCALE_NS>;
 interface ToolRowModel {
-    readonly path: string;
+    readonly path: string | undefined;
     readonly state: 'running' | 'ready' | 'error' | 'stopped';
 }
 export declare function officeArtifactRowModel(block: ToolCallViewProps['block']): ToolRowModel;
