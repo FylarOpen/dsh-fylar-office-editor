@@ -43,18 +43,20 @@ The bundled SDK is proprietary commercial software. Each License Credential or a
 - A modern browser with Worker, SharedWorker, WebAssembly, IndexedDB, Blob, and ArrayBuffer support.
 - A valid Fylar Office SDK License Credential or other authorization. The bundled commercial license includes the Free Allowance described above.
 
-### 1. Install from npm
+### 1. Install or update from npm
 
-Stop the currently running DSH process, then install the plugin package:
+Stop the currently running DSH process, then install or update the plugin package:
 
 ```bash
-npx @deepseek-ai/dsh plugin --profile web add @fylar/dsh-fylar-office-editor
+npx @deepseek-ai/dsh plugin --profile web add @fylar/dsh-fylar-office-editor@latest
 ```
+
+Use the same command for both the first installation and later updates. `@latest` explicitly selects npm's `latest` release instead of retaining a previously locked version.
 
 If running DSH from its source repository, use the repository script instead:
 
 ```bash
-pnpm dsh plugin --profile web add @fylar/dsh-fylar-office-editor
+pnpm dsh plugin --profile web add @fylar/dsh-fylar-office-editor@latest
 ```
 
 The npm package includes its verified `lib/` output and SDK runtime, so users do not need to clone or build the plugin.
@@ -132,12 +134,17 @@ When the environment does not qualify, the PDF action is disabled and the plugin
 
 ## Upgrade and uninstall
 
-To replace an existing installation, stop DSH, remove the current plugin row, install the current npm package version, and restart:
+To upgrade, stop DSH, run the same command used for installation, and restart. There is no need to uninstall first:
+
+```bash
+npx @deepseek-ai/dsh plugin --profile web add @fylar/dsh-fylar-office-editor@latest
+npx @deepseek-ai/dsh web
+```
+
+To uninstall, stop DSH and run:
 
 ```bash
 npx @deepseek-ai/dsh plugin --profile web remove @fylar/dsh-fylar-office-editor
-npx @deepseek-ai/dsh plugin --profile web add @fylar/dsh-fylar-office-editor
-npx @deepseek-ai/dsh web
 ```
 
 ## Current limits

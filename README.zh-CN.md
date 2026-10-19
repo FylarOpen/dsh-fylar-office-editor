@@ -43,18 +43,20 @@
 - 浏览器支持 Worker、SharedWorker、WebAssembly、IndexedDB、Blob 和 ArrayBuffer。
 - 具备有效的 Fylar Office SDK License Credential 或其他授权；随附商业许可证包含上述免费额度。
 
-### 1. 从 npm 安装
+### 1. 从 npm 安装或升级
 
-先停止正在运行的 DSH，再安装插件包：
+先停止正在运行的 DSH，再安装或升级插件包：
 
 ```bash
-npx @deepseek-ai/dsh plugin --profile web add @fylar/dsh-fylar-office-editor
+npx @deepseek-ai/dsh plugin --profile web add @fylar/dsh-fylar-office-editor@latest
 ```
+
+首次安装和后续升级都使用同一条命令。`@latest` 显式选择 npm 的 `latest` 版本，避免重复安装时沿用锁定的旧版本。
 
 如果从 DSH 源码仓库运行，则在 DSH 源码根目录执行：
 
 ```bash
-pnpm dsh plugin --profile web add @fylar/dsh-fylar-office-editor
+pnpm dsh plugin --profile web add @fylar/dsh-fylar-office-editor@latest
 ```
 
 npm 包已经包含验证过的 `lib/` 构建产物和 SDK runtime，普通用户不需要克隆或构建插件。
@@ -132,12 +134,17 @@ Word 和 Excel 格式在以下条件全部满足时可以导出 PDF：
 
 ## 升级与卸载
 
-替换已安装版本时，先停止 DSH，移除当前插件，再安装当前 npm 包版本并重启：
+升级时，先停止 DSH，执行与首次安装相同的命令，再重启；无需先卸载：
+
+```bash
+npx @deepseek-ai/dsh plugin --profile web add @fylar/dsh-fylar-office-editor@latest
+npx @deepseek-ai/dsh web
+```
+
+卸载时，先停止 DSH，再执行：
 
 ```bash
 npx @deepseek-ai/dsh plugin --profile web remove @fylar/dsh-fylar-office-editor
-npx @deepseek-ai/dsh plugin --profile web add @fylar/dsh-fylar-office-editor
-npx @deepseek-ai/dsh web
 ```
 
 ## 当前限制
